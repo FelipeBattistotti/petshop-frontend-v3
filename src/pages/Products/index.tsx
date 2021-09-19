@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import { FiChevronLeft, FiEdit, FiTrash2 } from 'react-icons/fi';
 import { useToasts } from 'react-toast-notifications';
 
+import { useFetcher } from './../../hooks/useFetcher';
 import api from '../../services/api';
 
 interface Product {
@@ -17,27 +18,52 @@ interface Product {
   user_id: string;
 }
 
+// GraphQL
+// request -> 'graphql' 'graphql-request'
+// const headers = {
+//   authorization: String(localStorage.getItem('userId'))
+// }
+
+// const fetcher = (query: string) => request(String(process.env.NEXT_PUBLIC_API_URL), query, null, headers)
+
+
+// Fetch
+// const headers: Headers = new Headers();
+// headers.append("Authorization",
+//   typeof window !== 'undefined' ? String(localStorage.getItem('userId')) : ''
+// );
+
+// const fetcher = (url: string) => fetch(url, {
+//   headers: headers
+// })
+// .then(r => r.json())
+
+
 export default function Products () {
   const [products, setProducts] = useState<Product[]>([]);
+  const [search, setSearch] = useState('');
 
   const userId = typeof window !== 'undefined' ? localStorage.getItem('userId') : '';
 
   const router = useRouter();
   const { addToast } = useToasts();
 
+  // Axios
+  const { data: productList } = useFetcher<Product[]>('product', search)
+
   useEffect(() => {
-    loadProducts();
+    //loadProducts();
   }, [userId]);
 
-  async function loadProducts () {
-    const response = await api.get('product', {
-      headers: {
-        Authorization: userId,
-      }
-    });
+  // async function loadProducts () {
+  //   const response = await api.get('product', {
+  //     headers: {
+  //       Authorization: userId,
+  //     }
+  //   });
 
-    setProducts(response.data);
-  }
+  //   setProducts(response.data);
+  // }
 
   const handleLogout = () => {
     localStorage.clear();
@@ -95,7 +121,7 @@ export default function Products () {
 
       <div className="profile-container6">
         <ul>
-          {products.map((product: Product) => (
+          {productList && productList.map((product: Product) => (
             <li key={product.id}>
               <div>
                 <p className="title">Nome</p>

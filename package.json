@@ -20,7 +20,8 @@
     "react-icons": "^4.2.0",
     "react-toast-notifications": "^2.5.1",
     "rimraf": "^3.0.2",
-    "sharp": "^0.29.0"
+    "sharp": "^0.29.0",
+    "swr": "^1.0.1"
   },
   "devDependencies": {
     "@types/react": "17.0.17",
