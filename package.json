@@ -1,0 +1,31 @@
+{
+  "name": "petshop-frontend-v2",
+  "version": "0.1.0",
+  "private": false,
+  "license": "MIT",
+  "author": {
+    "name": "Felipe Battistotti"
+  },
+  "scripts": {
+    "dev": "rimraf .next && next dev --port 3002",
+    "build": "rimraf .next && next build",
+    "start": "next start --port 3002",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "axios": "^0.21.1",
+    "next": "latest",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "react-icons": "^4.2.0",
+    "react-toast-notifications": "^2.5.1",
+    "rimraf": "^3.0.2",
+    "sharp": "^0.29.0"
+  },
+  "devDependencies": {
+    "@types/react": "17.0.17",
+    "eslint": "7.32.0",
+    "eslint-config-next": "11.0.1",
+    "typescript": "4.3.5"
+  }
+}
