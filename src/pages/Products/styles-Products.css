@@ -99,6 +99,7 @@
     color: #fafafc;
 }
 
+.profile-container5,
 .profile-container6 {
     width: 80%;
     padding: 10 30px;
@@ -106,6 +107,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.profile-container5 input {
+    width: 600px;
+    height: 45px;
+    border-radius: 8px;
 }
 
 .profile-container6 ul {

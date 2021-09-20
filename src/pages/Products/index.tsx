@@ -50,6 +50,7 @@ interface Product {
 
 export default function Products () {
   const [products, setProducts] = useState<Product[]>([]);
+  const [search, setSearch] = useState('');
 
   const userId = typeof window !== 'undefined' ? localStorage.getItem('userId') : '';
 
@@ -74,7 +75,7 @@ export default function Products () {
   //const { data } = useSWR<Product[]>(`${process.env.NEXT_PUBLIC_API_URL}/product`, fetcher)
 
   // Axios
-  const { data: productList } = useFetcher<Product[]>('product')
+  const { data: productList, isValidating } = useFetcher<Product[]>('product', search)
 
   useEffect(() => {
     //loadProducts();
@@ -144,6 +145,15 @@ export default function Products () {
         <p className="title">Produtos</p>
       </div>
 
+      <div className="profile-container5">
+        <input
+          type="text"
+          placeholder="Pesquisar"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+      </div>
+
       <div className="profile-container6">
         {productList ? (
           <ul>
@@ -178,9 +188,13 @@ export default function Products () {
             ))}
           </ul>
         ) :
-          <div className="profile-container4">
-            <p className="title">Carregando...</p>
-          </div>
+          <>
+            {isValidating ? (
+              <div className="profile-container4">
+                <p className="title">Carregando...</p>
+              </div>
+            ) : null}
+          </>
         }
       </div>
     </>
