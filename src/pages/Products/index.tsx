@@ -20,36 +20,61 @@ interface Product {
 
 // GraphQL
 // request -> 'graphql' 'graphql-request'
+// null -> variables (caso queira passar variáveis)
 // const headers = {
 //   authorization: String(localStorage.getItem('userId'))
 // }
 
-// const fetcher = (query: string) => request(String(process.env.NEXT_PUBLIC_API_URL), query, null, headers)
+// const fetcher = (query: string) =>
+//   request(String(process.env.NEXT_PUBLIC_API_URL), query, null, headers)
 
 
 // Fetch
 // const headers: Headers = new Headers();
 // headers.append("Authorization",
-//   typeof window !== 'undefined' ? String(localStorage.getItem('userId')) : ''
-// );
+//   typeof window !== 'undefined' ? String(localStorage.getItem('userId')) : '');
 
 // const fetcher = (url: string) => fetch(url, {
 //   headers: headers
 // })
-// .then(r => r.json())
+//   .then(r => r.json())
 
+
+// Axios
+// const fetcher = (url: string) => api.get(url, {
+//   headers: {
+//     Authorization: typeof window !== 'undefined' ? localStorage.getItem('userId') : ''
+//   }
+// })
+//   .then(r => r.data)
 
 export default function Products () {
   const [products, setProducts] = useState<Product[]>([]);
-  const [search, setSearch] = useState('');
 
   const userId = typeof window !== 'undefined' ? localStorage.getItem('userId') : '';
 
   const router = useRouter();
   const { addToast } = useToasts();
 
+  // GraphQL
+  // const { data } = useSWR<Product[]>(
+  //   `{
+  //     product {
+  //       id
+  //       name
+  //       category
+  //       price
+  //       stock_quantity
+  //     }
+  //   }`,
+  //   fetcher
+  // )
+
+  // Fetch
+  //const { data } = useSWR<Product[]>(`${process.env.NEXT_PUBLIC_API_URL}/product`, fetcher)
+
   // Axios
-  const { data: productList } = useFetcher<Product[]>('product', search)
+  const { data: productList } = useFetcher<Product[]>('product')
 
   useEffect(() => {
     //loadProducts();
@@ -120,37 +145,43 @@ export default function Products () {
       </div>
 
       <div className="profile-container6">
-        <ul>
-          {productList && productList.map((product: Product) => (
-            <li key={product.id}>
-              <div>
-                <p className="title">Nome</p>
-                <p>{product.name}</p>
+        {productList ? (
+          <ul>
+            {productList && productList.map((product: Product) => (
+              <li key={product.id}>
+                <div>
+                  <p className="title">Nome</p>
+                  <p>{product.name}</p>
 
-                <p className="title">Categoria</p>
-                <p>{product.category}</p>
+                  <p className="title">Categoria</p>
+                  <p>{product.category}</p>
 
-                <p className="title">Preço</p>
-                <p>{Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(product.price)}</p>
+                  <p className="title">Preço</p>
+                  <p>{Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(product.price)}</p>
 
-                <p className="title">Qt. Estoque</p>
-                <p>{Intl.NumberFormat('pt-BR', { style: 'decimal' }).format(product.stock_quantity)}</p>
-              </div>
+                  <p className="title">Qt. Estoque</p>
+                  <p>{Intl.NumberFormat('pt-BR', { style: 'decimal' }).format(product.stock_quantity)}</p>
+                </div>
 
-              <div>
-                <button onClick={() => handleModifyProduct(product.id)} type="button" title="Alterar Produto">
-                  <FiEdit size={27} />
-                </button>
+                <div>
+                  <button onClick={() => handleModifyProduct(product.id)} type="button" title="Alterar Produto">
+                    <FiEdit size={27} />
+                  </button>
 
-                <br/><br/><br/>
+                  <br/><br/><br/>
 
-                <button onClick={() => handleDeleteProduct(product.id)} type="button" title="Excluir Produto">
-                  <FiTrash2 size={27} />
-                </button>
-              </div>
-            </li>
-          ))}
-        </ul>
+                  <button onClick={() => handleDeleteProduct(product.id)} type="button" title="Excluir Produto">
+                    <FiTrash2 size={27} />
+                  </button>
+                </div>
+              </li>
+            ))}
+          </ul>
+        ) :
+          <div className="profile-container4">
+            <p className="title">Carregando...</p>
+          </div>
+        }
       </div>
     </>
   );
